@@ -1,72 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Creative Portfolio — Josip Belošić</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#090909;color:#f5f5f5;font-family:Arial,Helvetica,sans-serif}
-.container{max-width:1050px;margin:auto;padding:70px 24px}
-.hero{padding:35px 0 55px}
-.kicker{color:#c9a24a;text-transform:uppercase;letter-spacing:3px;font-size:13px;font-weight:700}
-h1{font-size:clamp(42px,7vw,78px);line-height:.98;margin:18px 0}
-.subtitle{font-size:20px;color:#b8b8b8;max-width:720px;line-height:1.55}
-.tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
-.tag{border:1px solid #333;border-radius:999px;padding:9px 14px;color:#ddd;font-size:14px}
-h2{font-size:30px;margin:65px 0 22px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{background:#111;border:1px solid #262626;border-radius:16px;padding:24px;transition:.2s}
-.card:hover{transform:translateY(-3px);border-color:#555}
-.card h3{margin:0 0 10px;font-size:20px}
-.card p{margin:0;color:#aaa;line-height:1.5}
-.card a{display:inline-block;margin-top:18px;color:#c9a24a;text-decoration:none;font-weight:700}
-.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-.link{display:block;background:#111;border:1px solid #292929;border-radius:14px;padding:20px;color:#fff;text-decoration:none}
-.link span{display:block;color:#999;font-size:13px;margin-top:6px}
-footer{margin-top:70px;padding-top:25px;border-top:1px solid #222;color:#777;font-size:14px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Josip Belošić — AI Creative Portfolio</title>
+  <style>
+    :root {
+      --bg: #070707;
+      --panel: #0f0f10;
+      --panel-2: #111214;
+      --line: rgba(255,255,255,0.12);
+      --text: #f1f1f1;
+      --muted: #d8d8d8;
+      --subtle: #b3b3b3;
+      --gold: #d0a957;
+      --chip: rgba(255,255,255,0.04);
+      --chip-border: rgba(255,255,255,0.15);
+      --shadow: rgba(0,0,0,0.32);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 0;
+      background:
+        linear-gradient(180deg, #f4f4f4 0 72px, #080808 72px 100%);
+    }
+
+    .mockup {
+      width: 100%;
+      max-width: 980px;
+      min-height: 100vh;
+      background: var(--bg);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .browser-bar {
+      height: 72px;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px 0 20px;
+      color: #171717;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .status-left {
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-family: "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .signal {
+      display: inline-flex;
+      gap: 2px;
+      align-items: end;
+      height: 12px;
+    }
+
+    .signal span {
+      display: block;
+      width: 2px;
+      border-radius: 2px;
+      background: #111;
+      opacity: 0.8;
+    }
+
+    .signal span:nth-child(1) { height: 3px; }
+    .signal span:nth-child(2) { height: 5px; }
+    .signal span:nth-child(3) { height: 8px; }
+    .signal span:nth-child(4) { height: 10px; }
+
+    .window-controls {
+      height: 80px;
+      background: #f3f3f3;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px 0 18px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .left-window {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .close-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #1f1f1f;
+      position: relative;
+      display: inline-block;
+    }
+
+    .close-btn::before,
+    .close-btn::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 11px;
+      height: 1.6px;
+      background: #fff;
+      border-radius: 2px;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .close-btn::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .address-bar {
+      flex: 1;
+      min-width: 0;
+      margin: 0 18px 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111;
+      font-size: clamp(1.1rem, 2.2vw, 2.1rem);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-family: "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    .tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .dots span {
+      width: 5px;
+      height: 5px;
+      background: #232323;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .content {
+      padding: 68px 50px 80px;
+      background: #080808;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: 1.2rem;
+      margin-bottom: 26px;
+    }
+
+    .hero-title {
+      margin: 0 0 18px;
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      font-weight: 800;
+      color: #f5f5f5;
+      font-family: "SF Pro Display", "Segoe UI", sans-serif;
+    }
+
+    .hero-copy {
+      max-width: 790px;
+      color: rgba(255,255,255,0.78);
+      font-size: clamp(1.8rem, 2.6vw, 3.2rem);
+      line-height: 1.08;
+      letter-spacing: -0.06em;
+      font-weight: 400;
+      margin: 0 0 34px;
+    }
+
+    .tags {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(200px, 1fr));
+      gap: 18px 18px;
+      max-width: 700px;
+      margin-top: 18px;
+    }
+
+    .tag {
+      border: 1px solid var(--chip-border);
+      background: rgba(255,255,255,0.02);
+      border-radius: 999px;
+      padding: 16px 18px;
+      font-size: clamp(1.05rem, 1.6vw, 1.7rem);
+      letter-spacing: -0.04em;
+      color: rgba(255,255,255,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 62px;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .section-title {
+      margin: 80px 0 20px;
+      font-size: clamp(3rem, 5vw, 5rem);
+      letter-spacing: -0.07em;
+      line-height: 0.9;
+      font-weight: 800;
+    }
+
+    .card-list {
+      display: grid;
+      gap: 22px;
+      margin-top: 28px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 10px;
+    }
+
+    .card {
+      padding: 18px 0 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .card h3 {
+      margin: 0 0 12px;
+      font-size: clamp(2.0rem, 3vw, 3.1rem);
+      letter-spacing: -0.06em;
+      line-height: 1.05;
+      font-weight: 700;
+    }
+
+    .card p {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(1.2rem, 2vw, 2.1rem);
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+      color: rgba(255,255,255,0.8);
+    }
+
+    @media (max-width: 700px) {
+      .browser-bar {
+        height: 64px;
+        padding: 0 14px;
+      }
+
+      .window-controls {
+        height: 68px;
+        padding: 0 12px;
+      }
+
+      .address-bar {
+        font-size: 1.1rem;
+      }
+
+      .content {
+        padding: 42px 20px 60px;
+      }
+
+      .eyebrow {
+        letter-spacing: 0.18em;
+        font-size: 0.9rem;
+      }
+
+      .tags {
+        grid-template-columns: 1fr;
+      }
+
+      .tag {
+        min-height: 52px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<section class="hero">
-<div class="kicker">AI Creative Portfolio</div>
-<h1>Josip Belošić</h1>
-<p class="subtitle">AI Creative Producer focused on generative AI images, AI video, social-first content and creative production workflows.</p>
-<div class="tags">
-<span class="tag">AI Image Generation</span>
-<span class="tag">AI Video</span>
-<span class="tag">Creative Production</span>
-<span class="tag">Social Media</span>
-<span class="tag">Performance Creative</span>
-<span class="tag">AI Workflows</span>
-</div>
-</section>
+  <div class="mockup">
+    <div class="browser-bar">
+      <div class="status-left">16:28</div>
+      <div class="status-right">
+        <div class="signal" aria-label="LTE signal">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <span>LTE</span>
+        <span style="font-size:0.8rem; opacity:0.8;">◉</span>
+      </div>
+    </div>
 
-<h2>What I Create</h2>
-<div class="grid">
-<div class="card"><h3>AI Images</h3><p>Ultra-realistic AI visuals, product concepts, characters, campaign imagery and social content.</p></div>
-<div class="card"><h3>AI Video</h3><p>Short-form AI videos designed for TikTok, Instagram Reels, YouTube Shorts and advertising.</p></div>
-<div class="card"><h3>Creative Ads</h3><p>Concepts, hooks and visual creatives built around attention, storytelling and social performance.</p></div>
-<div class="card"><h3>AI Production</h3><p>End-to-end generative workflows using modern AI image, video and creative tools.</p></div>
-</div>
+    <div class="window-controls">
+      <div class="left-window">
+        <span class="close-btn" aria-label="close"></span>
+      </div>
 
-<h2>Portfolio</h2>
-<div class="links">
-<a class="link" href="https://www.instagram.com/americanmonki/" target="_blank"><strong>Americanmonki</strong><span>AI creative / social content →</span></a>
-<a class="link" href="https://www.instagram.com/funcrvenkapica/" target="_blank"><strong>Fun Crvenkapica</strong><span>AI creative / social content →</span></a>
-<a class="link" href="https://www.instagram.com/sultanalsheiker/" target="_blank"><strong>Sultan Al Sheiker</strong><span>AI creative / visual content →</span></a>
-<a class="link" href="https://www.instagram.com/l4rpboss/" target="_blank"><strong>L4RP Boss</strong><span>AI creative / social content →</span></a>
-</div>
+      <div class="address-bar">josip-ai-portfolio.html</div>
 
-<h2>Tools &amp; Skills</h2>
-<div class="grid">
-<div class="card"><h3>Generative AI</h3><p>ChatGPT · Claude · Grok · Grok Imagine · Gemini</p></div>
-<div class="card"><h3>AI Video</h3><p>Google Veo · Sora · Google Flow · Runway</p></div>
-<div class="card"><h3>Creative &amp; Marketing</h3><p>Social media · Creative concepts · Short-form content · Advertising</p></div>
-</div>
+      <div class="tabs">
+        <div class="dots" aria-label="more options">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
 
-<footer>© 2026 Josip Belošić · AI Creative Producer</footer>
-</div>
+    <main class="content">
+      <div class="eyebrow">AI Creative Portfolio</div>
+
+      <h1 class="hero-title">Josip Belošić</h1>
+
+      <p class="hero-copy">
+        AI Creative Producer focused on generative AI images, AI video, social-first content and creative production workflows.
+      </p>
+
+      <div class="tags">
+        <div class="tag">AI Image Generation</div>
+        <div class="tag">AI Video</div>
+        <div class="tag">Creative Production</div>
+        <div class="tag">Social Media</div>
+        <div class="tag">Performance Creative</div>
+        <div class="tag">AI Workflows</div>
+      </div>
+
+      <h2 class="section-title">What I Create</h2>
+
+      <div class="card-list">
+        <article class="card">
+          <h3>AI Images</h3>
+          <p>Ultra-realistic AI visuals, product concepts, characters, campaign imagery and social content.</p>
+        </article>
+
+        <article class="card">
+          <h3>AI Video</h3>
+          <p>Short-form AI videos tailored for TikTok, Instagram Reels, YouTube Shorts and branded content.</p>
+        </article>
+
+        <article class="card">
+          <h3>Creative Ads</h3>
+          <p>High-impact concepts, hooks and visual storytelling designed to stand out across digital channels.</p>
+        </article>
+
+        <article class="card">
+          <h3>AI Production</h3>
+          <p>Efficient AI-driven production pipelines that turn creative ideas into scalable, publish-ready content.</p>
+        </article>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
